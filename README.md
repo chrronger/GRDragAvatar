@@ -1,1 +1,3 @@
 # GRDragAvatar
+
+![](./drag.gif.mov)
