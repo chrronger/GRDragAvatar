@@ -11,24 +11,22 @@ import UIKit
 class GRImageView: UIImageView {
 
     var playView = UIView()
-    var priDamping:CGFloat = 0.0
+    var priDamping: CGFloat = 0.0
     var panGesture = UIPanGestureRecognizer()
     var animator = UIDynamicAnimator()
-//    var snapBehavior = UISnapBehavior()
-//    var attchmentBehavior = UIAttachmentBehavior()
     var centerPoint = CGPoint()
     
-    lazy var snapBehavior:UISnapBehavior = {
-        let snapBehavior = UISnapBehavior.init(item: self, snapTo: self.centerPoint)
+    lazy var snapBehavior: UISnapBehavior = {
+        let snapBehavior = UISnapBehavior(item: self, snapTo: self.centerPoint)
         snapBehavior.damping = self.priDamping
         return snapBehavior
     }()
  
-    lazy var attchmentBehavior:UIAttachmentBehavior = {
+    lazy var attchmentBehavior: UIAttachmentBehavior = {
         
         
         
-       let attchmentBehavior = UIAttachmentBehavior.init(item: self, offsetFromCenter: UIOffset(), attachedToAnchor: CGPoint())
+       let attchmentBehavior = UIAttachmentBehavior(item: self, offsetFromCenter: UIOffset(), attachedToAnchor: CGPoint())
         return attchmentBehavior
     }()
     
@@ -56,19 +54,19 @@ class GRImageView: UIImageView {
     }
     
      func initAnimator(){
-        animator = UIDynamicAnimator.init(referenceView: playView)
+        animator = UIDynamicAnimator(referenceView: playView)
         
         updateSnapPoint()
     }
     
      func addPanGesture(){
-        panGesture = UIPanGestureRecognizer.init(target: self, action: #selector(didPanGesture(_:)))
+        panGesture = UIPanGestureRecognizer(target: self, action: #selector(didPanGesture(_:)))
         addGestureRecognizer(panGesture)
     }
     
      func updateSnapPoint(){
-        centerPoint = self.convert(CGPoint.init(x: self.bounds.size.width/2, y: self.bounds.size.height/2), to: playView)
-        snapBehavior = UISnapBehavior.init(item: self, snapTo: centerPoint)
+        centerPoint = self.convert(CGPoint(x: self.bounds.size.width/2, y: self.bounds.size.height/2), to: playView)
+        snapBehavior = UISnapBehavior(item: self, snapTo: centerPoint)
         snapBehavior.damping = priDamping
     }
     
@@ -76,9 +74,9 @@ class GRImageView: UIImageView {
         let panLocation = pan.location(in: playView)
         if pan.state == .began {
             updateSnapPoint()
-            let offset = UIOffset.init(horizontal: panLocation.x - centerPoint.x, vertical: panLocation.y - centerPoint.y)
+            let offset = UIOffset(horizontal: panLocation.x - centerPoint.x, vertical: panLocation.y - centerPoint.y)
             animator.removeAllBehaviors()
-            attchmentBehavior = UIAttachmentBehavior.init(item: self, offsetFromCenter: offset, attachedToAnchor: panLocation)
+            attchmentBehavior = UIAttachmentBehavior(item: self, offsetFromCenter: offset, attachedToAnchor: panLocation)
             animator.addBehavior(attchmentBehavior)
         }else if pan.state == .changed {
             attchmentBehavior.anchorPoint = panLocation
